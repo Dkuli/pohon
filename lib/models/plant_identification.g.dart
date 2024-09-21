@@ -23,13 +23,14 @@ class PlantIdentificationAdapter extends TypeAdapter<PlantIdentification> {
       probability: fields[3] as double,
       gbifId: fields[4] as String,
       identificationDate: fields[5] as DateTime,
+      imagePath: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, PlantIdentification obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.species)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class PlantIdentificationAdapter extends TypeAdapter<PlantIdentification> {
       ..writeByte(4)
       ..write(obj.gbifId)
       ..writeByte(5)
-      ..write(obj.identificationDate);
+      ..write(obj.identificationDate)
+      ..writeByte(6)
+      ..write(obj.imagePath);
   }
 
   @override

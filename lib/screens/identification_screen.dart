@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'dart:io';
 import '../services/plant_api_service.dart';
 import '../models/plant_identification.dart';
@@ -16,25 +17,14 @@ class IdentificationScreen extends StatefulWidget {
   _IdentificationScreenState createState() => _IdentificationScreenState();
 }
 
-class _IdentificationScreenState extends State<IdentificationScreen> with SingleTickerProviderStateMixin {
+class _IdentificationScreenState extends State<IdentificationScreen> {
   List<PlantIdentification> _identifications = [];
   bool _isLoading = false;
-  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    )..repeat();
     _identifyPlant();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   Future<void> _identifyPlant() async {
@@ -48,9 +38,10 @@ class _IdentificationScreenState extends State<IdentificationScreen> with Single
         _identifications = results;
         _isLoading = false;
       });
-      
-      // Save identification to local database
-      await DatabaseService.saveIdentification(results.first);
+
+      if (_identifications.isNotEmpty) {
+        await DatabaseService.saveIdentification(_identifications.first);
+      }
     } catch (e) {
       print('Error occurred: $e');
       setState(() {
@@ -79,8 +70,26 @@ class _IdentificationScreenState extends State<IdentificationScreen> with Single
               CustomAppBar(title: 'Identification Results'),
               Expanded(
                 child: _isLoading
-                    ? _buildLoadingIndicator()
-                    : _buildResults(),
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/images/Animation - 1726286806585.json',
+                              width: 200,
+                              height: 200,
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Identifying plant...',
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      )
+                    : _identifications.isEmpty
+                        ? _buildNotIdentified()
+                        : _buildResults(),
               ),
             ],
           ),
@@ -89,24 +98,43 @@ class _IdentificationScreenState extends State<IdentificationScreen> with Single
     );
   }
 
-  Widget _buildLoadingIndicator() {
+  Widget _buildNotIdentified() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (_, child) {
-              return Transform.rotate(
-                angle: _controller.value * 2 * 3.14,
-                child: Icon(Icons.eco, size: 60, color: Colors.white),
-              );
-            },
+          Lottie.asset(
+            'assets/images/Animation - 1726507844804.json',
+            width: 150,
+            height: 150,
           ),
           SizedBox(height: 20),
           Text(
-            'Identifying plant...',
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
+            'Plant not identified',
+            style: TextStyle(color: Colors.white, fontSize: 22),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'We could not identify this plant.\nPlease try again or upload another image.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+          SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context); // Go back to previous screen
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.teal[700], backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+            ),
+            child: Text(
+              'Try Again',
+              style: TextStyle(fontSize: 16),
+            ),
           ),
         ],
       ),
@@ -158,6 +186,7 @@ class _IdentificationScreenState extends State<IdentificationScreen> with Single
                       ),
                     );
                   },
+                  showImage: false,
                 );
               },
             ),

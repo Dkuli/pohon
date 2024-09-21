@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart'; // Pastikan Anda menambahkan paket Lottie
 import '../models/plant_identification.dart';
 import '../widgets/plant_card.dart';
 import '../widgets/custom_app_bar.dart';
@@ -31,15 +32,31 @@ class IdentificationHistoryScreen extends StatelessWidget {
                     future: DatabaseService.getIdentificationHistory(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        // Ganti CircularProgressIndicator dengan Lottie animation
+                        return Center(
+                          child: Lottie.asset(
+                            'assets/images/Animation - 1726286806585.json', // Path ke animasi JSON
+                            width: 150,
+                            height: 150,
+                          ),
+                        );
                       } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
+                        return Center(
+                          child: Text(
+                            'Error: ${snapshot.error}',
+                            style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.red),
+                          ),
+                        );
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.history, size: 64, color: Colors.grey),
+                              Lottie.asset(
+                                'assets/images/Animation - 1726507844804.json', // Path animasi kosong
+                                width: 150,
+                                height: 150,
+                              ),
                               SizedBox(height: 16),
                               Text(
                                 'No identification history',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart'; // Pastikan Anda menambahkan Lottie
 import '../models/plant_identification.dart';
 import '../models/plant_detail.dart';
 import '../services/plant_api_service.dart';
@@ -62,9 +63,32 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
               CustomAppBar(title: widget.identification.species),
               Expanded(
                 child: _isLoading
-                    ? Center(child: CircularProgressIndicator(color: Colors.white))
+                    ? Center(
+                        // Ganti CircularProgressIndicator dengan Lottie animasi loading
+                        child: Lottie.asset(
+                          'assets/images/Animation - 1726286806585.json', // Pastikan path animasi benar
+                          width: 150,
+                          height: 150,
+                        ),
+                      )
                     : _plantDetail == null
-                        ? Center(child: Text('No details available', style: TextStyle(color: Colors.white)))
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Lottie.asset(
+                                  'assets/images/Animation - 1726507954618.json', // Animasi jika data tidak tersedia
+                                  width: 150,
+                                  height: 150,
+                                ),
+                                SizedBox(height: 16),
+                                Text(
+                                  'No details available',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          )
                         : Container(
                             decoration: BoxDecoration(
                               color: Colors.white,

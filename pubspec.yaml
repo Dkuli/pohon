@@ -72,6 +72,9 @@ flutter:
   assets:
     - assets/images/Animation - 1726282289457.json
     - assets/images/Animation - 1726286806585.json
+    - assets/images/Animation - 1726507794244.json
+    - assets/images/Animation - 1726507844804.json
+    - assets/images/Animation - 1726507913530.json
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

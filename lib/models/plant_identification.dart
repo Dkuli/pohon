@@ -22,6 +22,9 @@ class PlantIdentification extends HiveObject {
   @HiveField(5)
   final DateTime identificationDate;
 
+  @HiveField(6)
+  final String imagePath;
+
   PlantIdentification({
     required this.species,
     required this.family,
@@ -29,9 +32,10 @@ class PlantIdentification extends HiveObject {
     required this.probability,
     required this.gbifId,
     required this.identificationDate,
+    required this.imagePath,
   });
 
-  factory PlantIdentification.fromJson(Map<String, dynamic> json) {
+  factory PlantIdentification.fromJson(Map<String, dynamic> json, String imagePath) {
     return PlantIdentification(
       species: json['species']['scientificNameWithoutAuthor'] ?? 'Unknown',
       family: json['species']['family']['scientificNameWithoutAuthor'] ?? 'Unknown',
@@ -39,6 +43,7 @@ class PlantIdentification extends HiveObject {
       probability: json['score'] ?? 0.0,
       gbifId: json['gbif']['id']?.toString() ?? 'Unknown',
       identificationDate: DateTime.now(),
+      imagePath: imagePath,
     );
   }
 }

@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _controller = AnimationController(vsync: this, duration: Duration(seconds: 2));
     _fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
 
     _controller.forward();
@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   void _startTimer() {
-    Timer(Duration(seconds: 10), _navigateToHome);
+    Timer(Duration(seconds: 4), _navigateToHome);
   }
 
   void _navigateToHome() {
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             child: FadeTransition(
               opacity: _fadeInAnimation,
               child: Lottie.asset(
-                'assets/images/Animation - 1726286806585.json', // Your Lottie file path
+                'assets/images/Animation - 1726507794244.json', // Your Lottie file path
                 width: 250, // Adjust the size to your design
                 height: 250,
                 fit: BoxFit.contain,

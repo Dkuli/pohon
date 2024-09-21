@@ -17,7 +17,7 @@ class PlantApiService {
       var responseBody = await response.stream.bytesToString();
       var jsonResponse = json.decode(responseBody);
       return (jsonResponse['results'] as List)
-          .map((result) => PlantIdentification.fromJson(result))
+          .map((result) => PlantIdentification.fromJson(result, image.path))
           .toList();
     } else {
       throw Exception('Failed to identify plant');
